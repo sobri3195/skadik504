@@ -1,150 +1,18 @@
-import { Link } from 'react-router-dom';
-import Card from '../components/Card';
-import ProgressBar from '../components/ProgressBar';
-import {
-  assignments,
-  fashMaterials,
-  educationPrograms,
-  fashVideos,
-  dummyUsers,
-} from '../data/dummyData';
-import { getStorage, storageKeys } from '../utils/localStorage';
-
-function ParticipantDashboard({ done, progress, quizResults }) {
-  const statItems = [
-    { title: 'Diklat yang didaftar', value: 11, tone: 'green' },
-    { title: 'Pesan dukungan', value: 0, tone: 'pink' },
-    { title: 'Komentar', value: 0, tone: 'blue' },
-  ];
-
-  return (
-    <div className='dashboard-shell'>
-      <h2 className='dashboard-title'>Dashboard</h2>
-
-      <section className='dashboard-stat-grid'>
-        {statItems.map((item) => (
-          <article key={item.title} className={`dashboard-stat-card ${item.tone}`}>
-            <div className='dashboard-stat-icon'>◉</div>
-            <div>
-              <h3>{item.value}</h3>
-              <p>{item.title}</p>
-            </div>
-          </article>
-        ))}
-      </section>
-
-      <section className='dashboard-welcome card'>
-        <div>
-          <h3>Hi M.,</h3>
-          <p className='highlight'>Anda memiliki 1 event baru</p>
-          <p>- New badge awarded</p>
-          <p className='dashboard-linkline'>Lihat semua event</p>
-        </div>
-        <div className='dashboard-illustration' aria-hidden='true'>
-          👨‍🏫
-        </div>
-      </section>
-
-      <section className='grid'>
-        <Card>
-          <h3>Progress pembelajaran</h3>
-          <ProgressBar value={progress} />
-          <p>{progress}% selesai</p>
-          <p>Materi selesai: {done}</p>
-          <p>Riwayat kuis terakhir: {quizResults.at(-1)?.score ?? '-'}</p>
-          <Link className='btn' to='/fash'>Lanjut ke FASH</Link>
-        </Card>
-
-        <Card>
-          <h3>Papan Pengumuman</h3>
-          <p className='highlight'>New Year Sales Festival</p>
-          <p>Dibuat oleh Staff | 13 Jul 2021</p>
-          <button className='btn ghost small'>Lihat Detil</button>
-        </Card>
-      </section>
-    </div>
-  );
-}
+import { Link } from 'react-router-dom'
+import { assignments, fashMaterials, fashVideos, educationPrograms, dummyUsers } from '../data/dummyData'
+import { getStorage, storageKeys } from '../utils/localStorage'
 
 export default function Dashboard() {
-  const user = getStorage(storageKeys.currentUser, {
-    role: 'Peserta',
-    username: 'guest',
-  });
-  const materiProgress = getStorage(storageKeys.materiProgress, {});
-  const submissionList = getStorage(storageKeys.assignmentSubmissions, []);
-  const quizResults = getStorage(storageKeys.quizResults, []);
-  const forumPosts = getStorage(storageKeys.forumPosts, []);
-
-  const done = Object.values(materiProgress).filter(Boolean).length;
-  const progress = Math.round((done / fashMaterials.length) * 100) || 0;
-
-  if (user.role === 'Instruktur') {
-    return (
-      <div className='grid'>
-        {[
-          ['Jumlah peserta dummy', dummyUsers.length],
-          ['Jumlah materi aktif', fashMaterials.length],
-          ['Jumlah tugas terkumpul', submissionList.length],
-          ['Jumlah forum diskusi', forumPosts.length],
-          [
-            'Rata-rata nilai kuis dummy',
-            quizResults.length
-              ? Math.round(
-                  quizResults.reduce((accumulator, item) => accumulator + item.score, 0) /
-                    quizResults.length,
-                )
-              : 0,
-          ],
-        ].map(([title, value]) => (
-          <Card key={title}>
-            <h3>{title}</h3>
-            <p>{value}</p>
-          </Card>
-        ))}
-        <Card className='span2'>
-          <h3>Submission Tugas Terbaru</h3>
-          <table>
-            <tbody>
-              {submissionList.slice(-5).map((submission) => (
-                <tr key={submission.id}>
-                  <td>{submission.studentName}</td>
-                  <td>{submission.assignmentTitle}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Card>
-      </div>
-    );
-  }
-
-  if (user.role === 'Admin') {
-    return (
-      <div className='grid'>
-        {[
-          ['Jumlah user dummy', dummyUsers.length],
-          ['Jumlah program pendidikan', educationPrograms.length],
-          ['Jumlah materi', fashMaterials.length],
-          ['Jumlah video', fashVideos.length],
-          ['Jumlah tugas', assignments.length],
-          ['Jumlah kuis', 1],
-          [
-            'Jumlah data localStorage',
-            Object.keys(localStorage).filter((key) => key.startsWith('fash_')).length,
-          ],
-        ].map(([title, value]) => (
-          <Card key={title}>
-            <h3>{title}</h3>
-            <p>{value}</p>
-          </Card>
-        ))}
-        <Link className='btn' to='/admin'>
-          Ke Admin LocalStorage
-        </Link>
-      </div>
-    );
-  }
-
-  return <ParticipantDashboard done={done} progress={progress} quizResults={quizResults} />;
+  const user = getStorage(storageKeys.currentUser, { role: 'Peserta', username: 'guest' })
+  const mp = getStorage(storageKeys.materiProgress, {})
+  const quiz = getStorage(storageKeys.quizResults, [])
+  const subs = getStorage(storageKeys.assignmentSubmissions, [])
+  const forum = getStorage(storageKeys.forumPosts, [])
+  const done = Object.values(mp).filter(Boolean).length
+  const progress = Math.round((done / fashMaterials.length) * 100) || 0
+  return <div className='stack'><section className='card'><h2>Selamat datang, {user.username}</h2><p>Lanjutkan pembelajaran Anda hari ini.</p><div className='row'><Link className='btn small' to='/fash'>Lanjutkan Materi</Link><Link className='btn ghost small' to='/tugas'>Kerjakan Tugas</Link><Link className='btn ghost small' to='/kuis'>Ikuti Kuis</Link></div></section>
+  {user.role === 'Peserta' && <><section className='grid cols-4'>{[['Progress Belajar', `${progress}%`], ['Materi Selesai', done], ['Tugas Aktif', assignments.length], ['Kuis Aktif', 1]].map(([t, v]) => <article className='card' key={t}><p>{t}</p><h3>{v}</h3></article>)}</section><section className='grid cols-2'><article className='card'><h3>Lanjutkan Pembelajaran</h3><p>{fashMaterials[done]?.title || fashMaterials[0].title}</p><div className='progress'><div style={{ width: `${progress}%` }} /></div></article><article className='card'><h3>Recent Activity</h3><ul><li>Materi diselesaikan: {done}</li><li>Tugas dikumpulkan: {subs.length}</li><li>Kuis dikerjakan: {quiz.length}</li></ul></article></section></>}
+  {user.role === 'Instruktur' && <section className='grid cols-4'>{[['Total peserta', dummyUsers.length], ['Submission terbaru', subs.length], ['Forum aktif', forum.length], ['Rata-rata nilai kuis', quiz.length ? Math.round(quiz.reduce((a, b) => a + b.score, 0) / quiz.length) : 0]].map(([t, v]) => <article className='card' key={t}><p>{t}</p><h3>{v}</h3></article>)}</section>}
+  {user.role === 'Admin' && <section className='grid cols-4'>{[['Total user dummy', dummyUsers.length], ['Total program', educationPrograms.length], ['Total materi', fashMaterials.length], ['Total video', fashVideos.length], ['Total tugas', assignments.length], ['Total kuis', 1]].map(([t, v]) => <article className='card' key={t}><p>{t}</p><h3>{v}</h3></article>)}<Link className='btn' to='/admin'>Admin LocalStorage</Link></section>}
+  </div>
 }

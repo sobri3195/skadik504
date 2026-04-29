@@ -1,2 +1,8 @@
-import { useParams } from 'react-router-dom';import { educationPrograms, fashMaterials } from '../data/dummyData';import { getStorage,setStorage,storageKeys } from '../utils/localStorage';
-export default function ProgramDetail(){const {id}=useParams();const p=educationPrograms.find(x=>x.id===id);const progress=getStorage(storageKeys.materiProgress,{}); if(!p) return <p>Program tidak ditemukan</p>; const done=(mid)=>{const n={...progress,[`${id}-${mid}`]:true};setStorage(storageKeys.materiProgress,n);alert('Data berhasil disimpan')}; return <div><h2>{p.name}</h2><p>{p.category}</p><p>{p.description}</p><h3>Materi</h3>{fashMaterials.slice(0,4).map(m=><div key={m.id} className='row'><span>{m.title}</span><button className='btn small' onClick={()=>done(m.id)}>Tandai Materi Selesai</button></div>)}</div>}
+import { useParams } from 'react-router-dom'
+import { educationPrograms, fashMaterials } from '../data/dummyData'
+
+export default function ProgramDetail() {
+  const { id } = useParams(); const p = educationPrograms.find((x) => x.id === id)
+  if (!p) return <p>Program tidak ditemukan.</p>
+  return <div className='stack'><section className='card'><h2>{p.name}</h2><p>{p.description}</p><p>{p.category} • Materi {p.materials} • Video {p.videos}</p></section><section className='card'><h3>Materi Program</h3>{fashMaterials.slice(0, 6).map((m, i) => <div className='row' key={m.id}><span>{i + 1}. {m.title}</span><button className='btn small'>Tandai Selesai</button></div>)}</section></div>
+}
