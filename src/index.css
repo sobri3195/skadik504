@@ -6,3 +6,20 @@
 .skadik-hero__logo-inner{width:100%;height:100%;border-radius:50%;display:grid;place-items:center;color:#ffd573;font-weight:700;text-align:center;font-size:.85rem;border:2px solid #f0c56b;padding:8px;background:radial-gradient(circle at 30% 30%,#b91c33,#720316)}
 .skadik-hero__content{background:rgba(10,42,74,.78);color:#fff;padding:1rem;border-radius:12px;max-width:760px}
 .skadik-hero__content h1,.skadik-hero__content p{margin-top:0}
+
+.dashboard-shell{display:grid;gap:1rem}
+.dashboard-title{margin:.2rem 0}
+.dashboard-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.dashboard-stat-card{border-radius:18px;padding:1rem 1.2rem;display:flex;gap:1rem;align-items:center}
+.dashboard-stat-card h3{margin:0;font-size:2rem;line-height:1}
+.dashboard-stat-card p{margin:.35rem 0 0}
+.dashboard-stat-card.green{background:#bfead8}
+.dashboard-stat-card.pink{background:#f2c9cc}
+.dashboard-stat-card.blue{background:#c9e4f4}
+.dashboard-stat-icon{width:50px;height:50px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:1.4rem}
+.dashboard-welcome{display:flex;justify-content:space-between;align-items:center;min-height:220px}
+.dashboard-welcome h3{font-size:2rem;color:#a72866;margin:.2rem 0}
+.highlight{font-weight:700;color:#1f5f97}
+.dashboard-linkline{margin-top:2rem;font-weight:600}
+.dashboard-illustration{font-size:7rem;opacity:.7;padding-right:1rem}
+@media(max-width:800px){.dashboard-welcome{flex-direction:column;align-items:flex-start}.dashboard-illustration{font-size:4.5rem;padding-right:0}}
